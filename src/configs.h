@@ -7,6 +7,6 @@
 #define OPERATIONS {"add", "delete", "edit", "see"}
 
 //defining max string length
-#define MAX_STRLEN 509
+#define MAX_STRLEN 1000
 
 #endif
