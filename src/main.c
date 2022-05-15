@@ -6,7 +6,7 @@ int main(int argc, char** argv){
 
 	//CALL CRUD FUNCTIONS FROM OPERATIONS FILE
 	if(strcmp(argv[1], "add") == 0){
-		addService("ugabuga");
+		addService(argv[2]);
 		return 0;
 	}  
 
@@ -24,6 +24,11 @@ int main(int argc, char** argv){
 		printf("fetch a service and its password \n");	
 		return 0;
 	}  
+
+	if(strcmp(argv[1], "help") == 0){
+		showHelp();
+		return 0;
+	}
 
 	if (argv[1] == NULL){
 		printf("no argument passed. use the 'cham help' command for help \n");
