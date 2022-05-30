@@ -5,3 +5,4 @@ src/cham
 src/cham.exe
 
 src/helpers
+src/helpers/**
