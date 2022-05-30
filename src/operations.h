@@ -3,10 +3,11 @@
 
 bool addService(char* service){
     char lineToWrite[MAX_STRLEN];
-    char field[MAX_STRLEN];
-    char value[MAX_STRLEN];
+    char field[101];
+    char value[101];
     FILE *fp = fopen(".chamFile", "ab+");
 
+    printf(hash());
     lineToWrite[0] = '\0';
 
     // '&' is the character delimiting end of service and start of key
@@ -18,19 +19,23 @@ bool addService(char* service){
     // fclose(fp);
     // return true;
     while(true){
-        printf("what's the name of the field to be stored? (or press enter to terminate program)\n");
+        printf("what's the name of the field to be stored? (max 100 characters) (or press enter to terminate program)\n");
         fgets(field, MAX_STRLEN, stdin);
+
 
         if(strcmp(field, "\n") == 0){
             break;
         }
 
-        //if line exceeds allowed line size, put line inside document, then clean line and get new values from variable
-        if(strlen(field) + strlen(lineToWrite) >= MAX_STRLEN - 1){
-            strcat(lineToWrite, "\n");
-            fputs(lineToWrite, fp);
-            lineToWrite[0] = '\0';
-        }
+        //removing newline character
+        field[strcspn(field, "\n")] = 0;
+
+        // //if line exceeds allowed line size, put line inside document, then clean line and get new values from variable
+        // if(strlen(field) + strlen(lineToWrite) >= MAX_STRLEN - 1){
+        //     strcat(lineToWrite, "\n");
+        //     fputs(lineToWrite, fp);
+        //     lineToWrite[0] = '\0';
+        // }
 
         // '#' is the character delimiting end of key and start of value
         strcat(field, "#");
@@ -42,20 +47,32 @@ bool addService(char* service){
         if(strcmp(value, "\n") == 0){
             break;
         }
+
+        //removing newline character
+        value[strcspn(value, "\n")] = 0;
         
-        //if line exceeds allowed line size, put line inside document, then clean line and get new values from variable
-        if(strlen(value) + strlen(lineToWrite) >= MAX_STRLEN - 1){
-            strcat(lineToWrite, "\n");
-            fputs(lineToWrite, fp);
-            lineToWrite[0] = '\0';
-        }
+        // //if line exceeds allowed line size, put line inside document, then clean line and get new values from variable
+        // if(strlen(value) + strlen(lineToWrite) >= MAX_STRLEN - 1){
+        //     strcat(lineToWrite, "\n");
+        //     fputs(lineToWrite, fp);
+        //     lineToWrite[0] = '\0';
+        // }
 
         // ';' is the character delimiting end of key value pair (which is also the end of the line)
         strcat(value, ";");
         strcat(lineToWrite, value);
-
-        fputs(lineToWrite, fp);
     }
+
+    // quitting function if user quits before registering a key - value pair
+    if(strstr(lineToWrite, "#") == NULL
+        || strstr(lineToWrite, ";") == NULL){
+            fclose(fp);
+            return NULL;
+    }
+
+    strcat(lineToWrite, "\n");
+
+    fputs(lineToWrite, fp);
 
     fclose(fp);
     return true;
