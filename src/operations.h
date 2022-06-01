@@ -7,7 +7,7 @@ bool addService(char* service){
     char value[101];
     FILE *fp = fopen(".chamFile", "ab+");
 
-    printf(hash());
+    //printf(hash());
     lineToWrite[0] = '\0';
 
     // '&' is the character delimiting end of service and start of key
@@ -67,15 +67,26 @@ bool addService(char* service){
     if(strstr(lineToWrite, "#") == NULL
         || strstr(lineToWrite, ";") == NULL){
             fclose(fp);
-            return NULL;
+            return false;
     }
 
     strcat(lineToWrite, "\n");
 
-    fputs(lineToWrite, fp);
+    fputs(hash(lineToWrite), fp);
 
     fclose(fp);
     return true;
+}
+
+bool fetchService(){
+    char buffer[MAX_STRLEN];
+    FILE *fp = fopen(".chamFile", "r");
+
+    while(fgets(buffer, MAX_STRLEN, fp)){
+        printf("%s\n", hash(buffer));
+    }
+
+    fclose(fp);
 }
 
 void showHelp(){

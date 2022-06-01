@@ -21,7 +21,7 @@ int main(int argc, char** argv){
 	}  
 
 	if (strcmp(argv[1], "fetch") == 0){
-		printf("fetch a service and its password \n");	
+		fetchService(argv[2]);
 		return 0;
 	}  
 
