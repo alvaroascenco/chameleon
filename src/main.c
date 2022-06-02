@@ -4,6 +4,20 @@ int main(int argc, char** argv){
 
 	char acceptedArgs[OPERATIONS_QUANTITY][OPERATIONS_STRLEN] = OPERATIONS;
 
+	// printf("num of args: %d \n", argc);
+	// for(int counter = 0; counter < argc; counter++){
+		// printf("arg %d : %s \n", counter, argv[counter]);
+	// }
+
+	// for(int counter = 0; counter < OPERATIONS_QUANTITY; counter++){
+		// printf("op %d : %s \n", counter, acceptedArgs[counter]);
+	// }
+
+	if (argc == 1){
+		printf("no argument passed. use the 'cham help' command for help \n");
+		return 1;
+	} 
+
 	//CALL CRUD FUNCTIONS FROM OPERATIONS FILE
 	if(strcmp(argv[1], "add") == 0){
 		addService(argv[2]);
@@ -30,21 +44,10 @@ int main(int argc, char** argv){
 		return 0;
 	}
 
-	if (argv[1] == NULL){
-		printf("no argument passed. use the 'cham help' command for help \n");
-		return 1;
-	} 
 	
 	printf("wrong argument passed. to see what arguments are valid use the 'cham help' command \n");
 	return 1;
 
-	// printf("num of args: %d \n", argc);
-	// for(int counter = 0; counter < argc; counter++){
-	// 	printf("arg %d : %s \n", counter, argv[counter]);
-	// }
-
-	// for(int counter = 0; counter < OPERATIONS_QUANTITY; counter++){
-	// 	printf("op %d : %s \n", counter, acceptedArgs[counter]);
-	// }
+	
 
 }

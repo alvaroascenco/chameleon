@@ -78,12 +78,31 @@ bool addService(char* service){
     return true;
 }
 
-bool fetchService(){
-    char buffer[MAX_STRLEN];
+bool fetchService(char* service){
     FILE *fp = fopen(".chamFile", "r");
+    char buffer[MAX_STRLEN];
+    char lineFetched[MAX_STRLEN];
+    char hashedLine[MAX_STRLEN];
+    char* delimiter;
+    int delimiterIndex;
+    char serviceToCompare[MAX_STRLEN-4];
 
-    while(fgets(buffer, MAX_STRLEN, fp)){
-        printf("%s\n", hash(buffer));
+    while(fgets(buffer, sizeof(buffer), fp)){
+        //TODO: fgets is bringing every line at once, splt them by newline
+        strcpy(hashedLine, hash(buffer));
+
+        printf(hashedLine);
+        //terminate line at delimiter
+        delimiter = strchr(hashedLine, '&');
+        delimiterIndex = (int)(delimiter - hashedLine);
+        hashedLine[delimiterIndex] = 0;
+
+
+        strcpy(serviceToCompare, hashedLine);
+
+        if(strcmp(serviceToCompare, service) == 0){
+            continue;
+        }
     }
 
     fclose(fp);
