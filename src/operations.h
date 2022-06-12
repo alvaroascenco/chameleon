@@ -81,28 +81,16 @@ bool addService(char* service){
 bool fetchService(char* service){
     FILE *fp = fopen(".chamFile", "r");
     char buffer[MAX_STRLEN];
-    char lineFetched[MAX_STRLEN];
-    char hashedLine[MAX_STRLEN];
-    char* delimiter;
-    int delimiterIndex;
-    char serviceToCompare[MAX_STRLEN-4];
+    char decodedLine[MAX_STRLEN];
+
+    if(fp == NULL){
+      printf("no chamfile generated yet, please add a service so it can be fetched \n");
+      exit(EXIT_FAILURE);
+    }
 
     while(fgets(buffer, sizeof(buffer), fp)){
-        //TODO: fgets is bringing every line at once, splt them by newline
-        strcpy(hashedLine, hash(buffer));
-
-        printf(hashedLine);
-        //terminate line at delimiter
-        delimiter = strchr(hashedLine, '&');
-        delimiterIndex = (int)(delimiter - hashedLine);
-        hashedLine[delimiterIndex] = 0;
-
-
-        strcpy(serviceToCompare, hashedLine);
-
-        if(strcmp(serviceToCompare, service) == 0){
-            continue;
-        }
+      strcpy(decodedLine, hash(buffer));
+      printf("%s", decodedLine);
     }
 
     fclose(fp);
