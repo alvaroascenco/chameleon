@@ -12,16 +12,15 @@ bool addService(char* service){
 
     // '&' is the character delimiting end of service and start of key
     strcat(service, "&");
-    printf("%s", lineToWrite);
     strcat(lineToWrite, service);
 
     // fputs(lineToWrite, fp);
     // fclose(fp);
     // return true;
     while(true){
-        printf("what's the name of the field to be stored? (max 100 characters) (or press enter to terminate program)\n");
-        fgets(field, MAX_STRLEN, stdin);
-
+        printf("what's the name of the field to be stored? (max 100 characters) (or press enter to terminate program) \n");
+	fflush(stdout);
+        fgets(field, sizeof(field), stdin);
 
         if(strcmp(field, "\n") == 0){
             break;
@@ -41,7 +40,8 @@ bool addService(char* service){
         strcat(field, "#");
         strcat(lineToWrite, field);
 
-        printf("what's the name of the value to be stored? (or press enter to terminate program)\n");
+        printf("what's the name of the value to be stored? (or press enter to terminate program) \n");
+	fflush(stdout);
         fgets(value, MAX_STRLEN, stdin);
 
         if(strcmp(value, "\n") == 0){
@@ -89,8 +89,7 @@ bool fetchService(char* service){
     }
 
     while(fgets(buffer, sizeof(buffer), fp)){
-      strcpy(decodedLine, hash(buffer));
-      printf("%s", decodedLine);
+      printf(hash(buffer));
     }
 
     fclose(fp);

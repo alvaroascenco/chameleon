@@ -1,4 +1,6 @@
-src/.chamfile
+src/.*
+src/~*
+src/#*
 src/main.exe
 src/main
 src/cham
