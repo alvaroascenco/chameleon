@@ -6,6 +6,7 @@ bool addService(char* service){
     char field[101];
     char value[101];
     FILE *fp = fopen(".chamFile", "ab+");
+    FILE *fpdbg = fopen(".chamFileDebug", "ab+");
 
     //printf(hash());
     lineToWrite[0] = '\0';
@@ -44,6 +45,7 @@ bool addService(char* service){
 	fflush(stdout);
         fgets(value, MAX_STRLEN, stdin);
 
+	//TODO: BUG LETS PROGRAM EXIT WITH NO VALUE ATTACHED TO FIELD
         if(strcmp(value, "\n") == 0){
             break;
         }
@@ -72,9 +74,12 @@ bool addService(char* service){
 
     strcat(lineToWrite, "\n");
 
+    // the original lineToWrite variable is overwritten for every call of the hash function
     fputs(hash(lineToWrite), fp);
+    fputs(hash(lineToWrite), fpdbg);
 
     fclose(fp);
+    fclose(fpdbg);
     return true;
 }
 
@@ -82,6 +87,10 @@ bool fetchService(char* service){
     FILE *fp = fopen(".chamFile", "r");
     char buffer[MAX_STRLEN];
     char decodedLine[MAX_STRLEN];
+    char* serviceToTest;
+    char* fieldToTest;
+    char* valueToTest;
+    char* lineToTest;
 
     if(fp == NULL){
       printf("no chamfile generated yet, please add a service so it can be fetched \n");
@@ -89,7 +98,22 @@ bool fetchService(char* service){
     }
 
     while(fgets(buffer, sizeof(buffer), fp)){
-      printf(hash(buffer));
+      strcpy(decodedLine, hash(buffer));
+      lineToTest = strtok(decodedLine, "\n");
+      while(lineToTest != NULL){
+	printf("linha e: %s \n", lineToTest);
+	lineToTest = strtok(NULL, "\n");
+      }
+      printf("acabou o arquivo");
+      /* serviceToTest = strtok(decodedLine, "&"); */
+
+      /* printf("servico: %s", serviceToTest); */
+      /* do{ */
+      /* 	fieldToTest = strtok(NULL, "#"); */
+      /* 	printf("campo: %s", fieldToTest); */
+      /* 	valueToTest = strtok(NULL, ";"); */
+      /* 	printf("valor: %s", valueToTest); */
+      /* }while(strstr(fieldToTest, "\n") == NULL && strstr(valueToTest, "\n") == NULL); */
     }
 
     fclose(fp);
