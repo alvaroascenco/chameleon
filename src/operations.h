@@ -86,11 +86,13 @@ bool addService(char* service){
 bool fetchService(char* service){
     FILE *fp = fopen(".chamFile", "r");
     char buffer[MAX_STRLEN];
-    char decodedLine[MAX_STRLEN];
+    char decodedBuffer[MAX_STRLEN];
     char* serviceToTest;
     char* fieldToTest;
     char* valueToTest;
     char* lineToTest;
+    char* bufferRemainder;
+    size_t lineToTestSize;
 
     if(fp == NULL){
       printf("no chamfile generated yet, please add a service so it can be fetched \n");
@@ -98,14 +100,60 @@ bool fetchService(char* service){
     }
 
     while(fgets(buffer, sizeof(buffer), fp)){
-      strcpy(decodedLine, hash(buffer));
-      lineToTest = strtok(decodedLine, "\n");
+      strcpy(decodedBuffer, hash(buffer));
+
+      lineToTest = strtok(decodedBuffer, "\n");
+
+      //getting rest of the string
+      bufferRemainder = strtok(NULL, "\0");
+
+      /* printf("buffer remainder: %s\n", bufferRemainder); */
+
+      //saving the rest of the buffer to be used after line is scanned
+      /* printf("decoded buffer after: %s\n", decodedBuffer); */
+      lineToTestSize = strlen(lineToTest);
+      /* printf("line to test size: %d\n", lineToTestSize);  */
+
+      char* p = decodedBuffer;
+      printf("index of first occurence of line to test on decoded buffer: %d\n", strstr(decodedBuffer, lineToTest));
+
+      /* while((p = strstr(p, lineToTest)) != NULL){ */
+      /* 	memmove(p, p+lineToTestSize, strlen(p+lineToTestSize) + 1); */
+      /* } */
+      
+      
       while(lineToTest != NULL){
-	printf("linha e: %s \n", lineToTest);
-	lineToTest = strtok(NULL, "\n");
+	serviceToTest = strtok(lineToTest, "&");
+	printf("servico: %s ", serviceToTest);
+
+	
+	do{
+	    fieldToTest = strtok(NULL, "#");
+	    printf("usuario: %s ", fieldToTest);
+
+	    valueToTest = strtok(NULL, ";");
+	    printf("senha: %s ", valueToTest);
+	    
+	    /* printf("%d", strstr(valueToTest, "\n")); */
+	    break;
+	}while(true);
+
+	/* //doing a loop iteration once and then doing it repeatedly until the line finishes */
+	/* fieldToTest = strtok(NULL, "#"); */
+	/* printf("campo: %s ", fieldToTest); */
+	/* valueToTest = strtok(NULL, ";"); */
+	/* while(strstr(valueToTest, "\n") != NULL){ */
+	/*   printf("valor: %s ", valueToTest); */
+	/*   fieldToTest = strtok(NULL, "#"); */
+	/*   printf("campo: %s ", fieldToTest); */
+	/*   valueToTest = strtok(NULL, ";"); */
+	/* }  */
+
+	lineToTest = strtok(bufferRemainder, "\n");
+	bufferRemainder = strtok(NULL, "\0");
       }
       printf("acabou o arquivo");
-      /* serviceToTest = strtok(decodedLine, "&"); */
+      /* serviceToTest = strtok(decodedBuffer, "&"); */
 
       /* printf("servico: %s", serviceToTest); */
       /* do{ */
