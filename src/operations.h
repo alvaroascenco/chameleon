@@ -124,19 +124,20 @@ bool fetchService(char* service){
       
       while(lineToTest != NULL){
 	serviceToTest = strtok(lineToTest, "&");
-	printf("servico: %s ", serviceToTest);
+	printf("servico: %s \n", serviceToTest);
 
 	
-	do{
-	    fieldToTest = strtok(NULL, "#");
-	    printf("usuario: %s ", fieldToTest);
+	fieldToTest = strtok(NULL, "#");
+
+	while(fieldToTest != NULL){
+	  
+	    printf("usuario: %s \n", fieldToTest);
 
 	    valueToTest = strtok(NULL, ";");
-	    printf("senha: %s ", valueToTest);
-	    
-	    /* printf("%d", strstr(valueToTest, "\n")); */
-	    break;
-	}while(true);
+	    printf("senha: %s \n", valueToTest);
+
+	    fieldToTest = strtok(NULL, "#");
+	}
 
 	/* //doing a loop iteration once and then doing it repeatedly until the line finishes */
 	/* fieldToTest = strtok(NULL, "#"); */
