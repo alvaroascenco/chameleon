@@ -25,7 +25,7 @@ int main(int argc, char** argv){
 	}  
 
 	if(strcmp(argv[1], "delete") == 0){
-		printf("deletes a service \n");
+		deleteService(argv[2]);
 		return 0;
 	}  
 

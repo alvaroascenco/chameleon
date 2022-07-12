@@ -47,6 +47,7 @@ bool addService(char* service){
 
 	//TODO: BUG LETS PROGRAM EXIT WITH NO VALUE ATTACHED TO FIELD
         if(strcmp(value, "\n") == 0){
+	  lineToWrite[strlen(lineToWrite) - strlen(field)] = '\0';
             break;
         }
 
@@ -140,6 +141,90 @@ void fetchService(char* service){
     }
 
     fclose(fp);
+}
+
+void deleteService(char* serviceToDelete){
+  FILE *fp = fopen(".chamFile", "r+");
+  FILE *fpDbg = fopen(".chamFileDebug", "r+");
+    char buffer[MAX_STRLEN];
+    char decodedBuffer[MAX_STRLEN];
+    char bufferToWrite[MAX_STRLEN];
+    char* serviceToTest;
+    char* lineToTest;
+    char* bufferRemainder;
+    size_t lineToTestSize;
+    bool foundResult;
+
+    if(fp == NULL){
+      printf("no chamfile generated yet, please add a service so it can be fetched \n");
+      exit(EXIT_FAILURE);
+    }
+
+    while(fgets(buffer, sizeof(buffer), fp)){
+      strcpy(decodedBuffer, hash(buffer));
+      strcpy(bufferToWrite, decodedBuffer);
+    int bufferToWriteLength = strlen(bufferToWrite);
+
+      printf("original decoded buffer: %s", decodedBuffer);
+
+      lineToTest = strtok(decodedBuffer, "\n");
+
+      //getting rest of the string
+      bufferRemainder = strtok(NULL, "\0");
+
+      //saving the rest of the buffer to be used after line is scanned
+      lineToTestSize = strlen(lineToTest);
+
+      char* p = decodedBuffer;
+      
+      while(lineToTest != NULL){
+
+	char* intactLineToTest = lineToTest;
+	int lineToTestLength = strlen(lineToTest);
+	printf("lineToTest : %s \n", intactLineToTest);
+
+	serviceToTest = strtok(lineToTest, "&");
+
+	if(strcmp(serviceToTest, serviceToDelete) == 0){
+	  /* lineToTest[0] = '\0'; */
+	  printf("serviceToTest : %s \n", serviceToTest);
+	  printf("bufferToWrite: %s \n", bufferToWrite);
+	  printf("bufferToWriteLength: %d \n", bufferToWriteLength);
+	  int i = 0;
+	  while(i < bufferToWriteLength){
+	    if(strstr(&bufferToWrite[i], intactLineToTest) == &bufferToWrite[i]){
+	      printf("\nhahah\n");
+	      bufferToWriteLength -= lineToTestLength;
+	      for (int j = i; j < bufferToWriteLength; j++){
+		bufferToWrite[j] = bufferToWrite[j+lineToTestLength];
+	      }
+	    } else i++;
+	  }
+	  bufferToWrite[i] = '\0';
+
+
+	  printf("achou");
+	  foundResult = true;
+	  break;
+	}
+	
+
+	lineToTest = strtok(bufferRemainder, "\n");
+	bufferRemainder = strtok(NULL, "\0");
+      }
+
+      printf("bufferToWriteNew: %s \n", bufferToWrite);
+
+      /* fwrite(hash(bufferToWrite), strlen(hash(bufferToWrite)) + 1, 1, fp); */
+      /* fwrite(bufferToWrite, strlen(bufferToWrite) + 1, 1, fpDbg); */
+    }
+
+    if(!foundResult){
+      printf("service not found \n");
+    }
+
+
+    fclose(fp);	
 }
 
 void showHelp(){
